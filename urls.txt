@@ -1,0 +1,5 @@
+Liste des logiciels : https://fnfe-mpe.org/factur-x/qui-propose-factur-x/
+Pypi : https://pypi.org/project/factur-x/
+Facture-x en allemagne : https://github.com/stephanstapel/ZUGFeRD-csharp
+Info : https://info.dematerialisation-de-factures.fr/obligations-2024/
+Exemple marketing : https://www.pleo.io/fr?&utm_source=google&utm_medium=paidsearch&utm_campaign=16806672407&utm_term=traitement%20des%20factures&utm_content=591567710290&gclid=Cj0KCQjwheyUBhD-ARIsAHJNM-OajMw5MViYKQuAK5sRSaiXDlul_ZfUlU_yEt5M8wqKxlBb767FnHEaAnx4EALw_wcB&network=g&device=m&matchtype=p&creative=591567710290&placement=&location=9055430
