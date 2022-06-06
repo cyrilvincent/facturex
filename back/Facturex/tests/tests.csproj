@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="itext7" Version="7.2.2" />
-    <PackageReference Include="itext7.pdfocr.api" Version="2.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -20,13 +19,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="ZUGFeRD-csharp" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="docs\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Update="docs\cvc_facturx.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="docs\factur-x_2_1_basic.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="docs\FactureCVC875.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
