@@ -1,0 +1,87 @@
+
+//*********** Material Chips style ***********
+#card-chips, .moreTags-list {
+  .mat-chip-list-wrapper .mat-standard-chip {
+    margin: 2px !important;
+  }
+
+  .mat-chip.mat-standard-chip {
+    border: 1px solid;
+    background-color: transparent !important;
+  }
+}
+
+//*********** Material DatePickerInput ***********
+.search-container {
+  .mat-datepicker-input {
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    color: var(--input-txt);
+    border: none;
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .mat-datepicker-toggle {
+    color: var(--input-txt) !important;
+  }
+
+  .mat-calendar {
+    background-color: var(--input-background) !important;
+  }
+}
+
+//*********** Material MatCards ***********
+.mat-card {
+  background-color: var(--components-background) !important;
+}
+
+//*********** Material Menu ***********
+.mat-menu-panel {
+  background-color: var(--components-background) !important;
+}
+
+//*********** Mat-radio before (change clinic menu) ***********
+.change-clinic .mat-radio-label-content.mat-radio-label-before {
+  flex: 1;
+  overflow: hidden;
+  margin-right: 10px;
+  text-overflow: ellipsis;
+}
+
+//*********** Overlay Image preview ***********
+#preview-container {
+  background-color: var(--components-background);
+  height: fit-content;
+  width: fit-content;
+  border-radius: 8px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    img {
+      object-fit: cover;
+      height: 300px;
+      width: auto;
+    }
+}
+
+.mat-dialog-content
+{
+  max-height: 100%;
+}
+
+.mat-card-header-text {
+  width: 100% ;
+
+}
+
+// .mat-form-field-appearance-outline .mat-form-field-outline-start { background-color: white!important; }
+// .mat-form-field-appearance-outline .mat-form-field-outline-gap { background-color: white!important; }
+// .mat-form-field-appearance-outline .mat-form-field-outline-end { background-color: white!important; }
+// mat-form-field mat-label { background-color: rgba(255, 255, 255, 0.9); }
+// .mat-form-field-appearance-outline:not(.mat-form-field-disabled) .mat-form-field-flex:hover .mat-form-field-outline {
+//     opacity: 1!important;
+// }
+

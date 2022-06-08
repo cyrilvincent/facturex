@@ -1,0 +1,50 @@
+@import "../style/theming";
+@import "../style/material";
+@import "../style/layout";
+
+//*********** Global styles ***********
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--background);
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; color: var(--dark-txt)
+}
+
+a {
+  color: inherit; text-decoration: none
+}
+
+table, th, td {
+  border: 1px solid;
+}
+
+ul {
+  padding-inline-start: 0;
+  margin: 0;
+  li {
+    list-style: none;
+  }
+  li:hover {
+    color: var(--main-color);
+  }
+}
+
+//*********** Variables ***********
+
+:root {
+  --header-height: 135px;
+  --nav-height: 80px
+}
+
+// Viewer
+.magnifyTool {
+  border: 2px solid white;
+  border-radius: 50%;
+}

@@ -1,0 +1,11 @@
+//======== Table Section ===========
+section.table-section {
+  display: flex;
+  max-width: 1705px;
+  padding: 40px 20px;
+  margin: 0 auto;
+
+  app-table {
+    width: 100%;
+  }
+}

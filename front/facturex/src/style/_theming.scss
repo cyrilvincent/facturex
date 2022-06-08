@@ -1,0 +1,87 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+@include mat.core();
+@import "./mixins";
+
+// Define a light theme
+$light-primary: mat.define-palette(mat.$indigo-palette);
+$light-accent: mat.define-palette(mat.$pink-palette);
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+  )
+));
+
+// Define a dark theme
+$dark-primary: mat.define-palette(mat.$pink-palette);
+$dark-accent: mat.define-palette(mat.$indigo-palette);
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+  )
+));
+
+// Get the color config from the theme.
+$light-color-config: mat.get-color-config($light-theme);
+$dark-color-config: mat.get-color-config($dark-theme);
+
+// Get the primary color palette from the color-config.
+$light-primary-palette: map.get($light-color-config, 'primary');
+$light-accent-palette: map.get($light-color-config, 'accent');
+
+$dark-primary-palette: map.get($dark-color-config, 'primary');
+$dark-accent-palette: map.get($dark-color-config, 'accent');
+
+// Default theme
+@include mat.all-component-themes($light-theme);
+#gradient {
+  @include gradient-light
+}
+
+// Dark theme
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+  @include mat.datepicker-color($light-theme);
+  @include mat.checkbox-color($light-theme);
+
+  --main-color: #{mat.get-color-from-palette($dark-primary-palette, 500)};
+  --accent-color: #{mat.get-color-from-palette($dark-accent-palette, 500)};
+  --nav-background: #0a0a0a;
+  --background: #171717;
+  --components-background: #2C2C2C;
+  --dark-txt: #FFFFFF;
+  --medium-txt: #FFFFFF6F;
+  --light-txt: #7A7A7A60;
+
+  --table-header: #414141;
+  --table-even: #343434;
+  --table-odd: #00000061;
+
+  --search-input-select-hover: #{mat.get-color-from-palette($dark-primary-palette, 500)};
+
+  #gradient {
+    @include gradient-dark
+  }
+}
+
+//*********** Variables ***********
+:root {
+  --main-color: #{mat.get-color-from-palette($light-primary-palette, 500)};
+  --accent-color: #{mat.get-color-from-palette($light-accent-palette, 500)};
+  --nav-background: #FFFFFF;
+  --background: #F6F6F6;
+  --components-background: #FFFFFF;
+  --dark-txt: #000000DE;
+  --medium-txt: #00000099;
+  --light-txt: #00000061;
+  --input-txt: #00000099;
+  --input-background: #FFFFFF;
+
+  --table-header: #FFFFFFB2;
+  --table-even: #FFFFFFB2;
+  --table-odd: #F7F7F7FF;
+
+  --search-input-select-hover: #{mat.get-color-from-palette($light-accent-palette, 500)};
+}

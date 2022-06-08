@@ -1,0 +1,22 @@
+//*********** Mixins ***********
+// Shadows
+@mixin shadow-lvl-dp1 {
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.14), 0 2px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+@mixin shadow-lvl-dp2 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+@mixin shadow-lvl-dp4 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.12), 0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+//Gradient
+@mixin gradient-light {
+  background: linear-gradient(45deg, rgba(7,61,163,0.9037199124726477) 22%, rgba(251,19,107,0.9) 96%);
+}
+
+@mixin gradient-dark {
+  background: linear-gradient(90deg, rgba(251,19,107,0.90) 22%, rgba(7,61,163,0.9) 96%);
+}

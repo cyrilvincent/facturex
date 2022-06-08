@@ -182,9 +182,6 @@ class PdfReaderService:
             for n in self.numbers:
                 if n[0] < best_net:
                     best_wt = n[0]
-        if self.mode != "PDF":
-            best_net_score /= 2
-            best_wt_score /= 2
         return (best_net, best_net_score), (best_wt, best_wt_score)
 
     def get_account(self):
@@ -197,7 +194,7 @@ class PdfReaderService:
         for a in self.accounts:
             if a[2] in self.content:
                 return a, 0.5
-
+        return "", "", "Unknown Account"
 
 
 if __name__ == '__main__':
@@ -215,4 +212,4 @@ if __name__ == '__main__':
     print(s.wts)
     print(res)
     res = s.get_account()
-    print(res)
+    print(res[0])
