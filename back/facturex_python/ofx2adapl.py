@@ -1,3 +1,4 @@
+import argparse
 from dataclasses import dataclass
 from typing import List, Optional
 from openpyxl.worksheet.worksheet import Worksheet
@@ -18,11 +19,14 @@ class OFX2AdaplRule:
 
 class Transaction2ADAPLWriter:
 
-    def __init__(self, transactions, year, rules: List[OFX2AdaplRule], template_path="docs/ADAPLTemplate.xlsx", append: bool=False):
+    def __init__(self, transactions, year, rules: List[OFX2AdaplRule], template_path="docs/ADAPLTemplate.xlsx",
+                 append: bool=False, destination = "docs"):
         self.transacs: List[Transaction] = transactions
         self.template_path: str = template_path
         self.year = year
         self.append = append
+        print(f"Append mode: {append}")
+        self.destination = destination
         self.path = self.copy_template()
         print(f"Open {self.path}")
         self.workbook = load_workbook(self.path)
@@ -47,7 +51,7 @@ class Transaction2ADAPLWriter:
 
 
     def copy_template(self):
-        path = self.template_path.replace("Template", str(self.year - 2000))
+        path = f"{self.destination}/ADAPL{str(self.year - 2000)}.xlsx"
         if not self.append:
             try:
                 print(f"Creating {path}")
@@ -58,7 +62,8 @@ class Transaction2ADAPLWriter:
         return path
 
     def write(self):
-        self.workbook.worksheets[0]["D1"] = self.year
+        if not self.append:
+            self.workbook.worksheets[0]["D1"] = self.year
         for t in self.transacs:
             self.write_transaction(t)
         if self.nb > 0:
@@ -94,7 +99,8 @@ class Transaction2ADAPLWriter:
         sheet.cell(row, 14).value = name
         sheet.cell(row, 15).value = -t.trn_amt
         wt, vat = self.compute_vat(-t.trn_amt, vat_number)
-        sheet.cell(row, 18).value = vat
+        if vat != 0:
+            sheet.cell(row, 18).value = vat
         sheet.cell(row, wt_col).value = wt
         sheet.cell(row, 54).value = t.fit_id
         self.sheets_rows[dt.month - 1] += 1
@@ -110,8 +116,7 @@ class Transaction2ADAPLWriter:
         sheet.cell(row, 3).value = t.trn_amt
         wt, vat = self.compute_vat(t.trn_amt, 0)
         sheet.cell(row, 6).value = wt
-        if vat != 0:
-            sheet.cell(row, 7).value = vat
+        sheet.cell(row, 7).value = vat
         sheet.cell(row, 53).value = t.fit_id
         self.sheets_positive_rows[dt.month - 1] += 1
 
@@ -143,8 +148,8 @@ class Transaction2ADAPLWriter:
         if name.endswith("/"):
             name = name[:-1]
         while "  " in name:
-            name = name.replace("  ", " ").strip()
-        return name
+            name = name.replace("  ", " ")
+        return name.strip()
 
 
     def get_date(self, transaction_date:str) -> datetime:
@@ -201,6 +206,7 @@ ofx2adapl_rules = [ #+12
     OFX2AdaplRule("AWS", "AWS", 38, 0),
     OFX2AdaplRule("AMAZON", "AMAZON", 28, 0),
     OFX2AdaplRule("PAYPAL", "PAYPAL", 28, 0),
+    OFX2AdaplRule("EURL DU ROCHER", "ROCHER DE L'OURS", 35, 1),
 
     OFX2AdaplRule("ATP", "ATP FORMATION", 0, 0),
     OFX2AdaplRule("BANQUE POPULAIRE", "BPAURA", 0, 0),
@@ -213,12 +219,18 @@ ofx2adapl_rules = [ #+12
 
 
 if __name__ == '__main__':
-
+    # -a docs/comptes2.ofx 22
     print("OFX to ADAPL by Cyril Vincent")
     print("=============================")
+    parser = argparse.ArgumentParser(description="OFX to ADAPL")
+    parser.add_argument("path", help="OFX Path")
+    parser.add_argument("year", help="Year in yyyy format", type=int)
+    parser.add_argument("-a", "--append", help="Append mode", action="store_true")
+    parser.add_argument("-d", "--destination", help="ADAPL directory Path", default="docs")
+    args = parser.parse_args()
     p = OFXParser()
-    p.parse("docs/comptes2.ofx")
-    print(p.transacs)
-    w = Transaction2ADAPLWriter(p.transacs, 2022, ofx2adapl_rules, append=True)
+    p.parse(args.path)
+    print(f"Found {len(p.transacs)} transactions")
+    w = Transaction2ADAPLWriter(p.transacs, 2022, ofx2adapl_rules, append=args.append, destination=args.destination)
     w.write()
     os.system(f"start EXCEL.EXE {w.path}")

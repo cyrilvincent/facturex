@@ -64,7 +64,7 @@ if __name__ == '__main__':
     print("OFX to CSV by Cyril Vincent")
     print("===========================")
     p = OFXParser()
-    p.parse("docs/comptes.ofx")
+    p.parse("docs/comptes_annuel.ofx")
     print(p.transacs)
     w = Transacs2CSVWriter(p.transacs)
     w.write("docs/comptes.csv")
