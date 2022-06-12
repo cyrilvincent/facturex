@@ -33,7 +33,7 @@ class Transaction2ADAPLWriter:
         self.sheets_rows = self.find_first_empty_rows(13)
         self.sheets_positive_rows = self.find_first_empty_rows(1)
         self.rules: List[OFX2AdaplRule] = rules
-        self.vats = [0.2, 0.55, 0]
+        self.vats = [0.2, 0.055, 0]
         self.nb = 0
 
     def find_first_empty_rows(self, col):
@@ -83,6 +83,20 @@ class Transaction2ADAPLWriter:
                 self.write_transaction_positive(t, dt, sheet)
             self.nb += 1
 
+    def write_transaction_positive(self, t: Transaction, dt:datetime, sheet: Worksheet):
+        row = self.sheets_positive_rows[dt.month - 1]
+        sheet.cell(row, 1).value = dt.strftime("%d/%m")
+        name = self.clean_name(t.name)
+        rule = self.search_rule(name, 0)
+        if rule is not None:
+            name = rule.name
+        sheet.cell(row, 2).value = name
+        sheet.cell(row, 3).value = t.trn_amt
+        sheet.cell(row, 6).value = f"=C{row}/(1+{self.vats[0]})"
+        sheet.cell(row, 7).value = f"=C{row}-F{row}"
+        sheet.cell(row, 53).value = t.fit_id
+        self.sheets_positive_rows[dt.month - 1] += 1
+
     def write_transaction_negative(self, t: Transaction, dt:datetime, sheet: Worksheet):
         row = self.sheets_rows[dt.month - 1]
         sheet.cell(row, 13).value = dt.strftime("%d/%m")
@@ -98,32 +112,11 @@ class Transaction2ADAPLWriter:
         name = self.clean_name(name)
         sheet.cell(row, 14).value = name
         sheet.cell(row, 15).value = -t.trn_amt
-        wt, vat = self.compute_vat(-t.trn_amt, vat_number)
-        if vat != 0:
-            sheet.cell(row, 18).value = vat
-        sheet.cell(row, wt_col).value = wt
+        if vat_number != 2:
+            sheet.cell(row, 18).value = f"=O{row}-O{row}/(1+{self.vats[vat_number]})"
+        sheet.cell(row, wt_col).value = f"=O{row}-R{row}"
         sheet.cell(row, 54).value = t.fit_id
         self.sheets_rows[dt.month - 1] += 1
-
-    def write_transaction_positive(self, t: Transaction, dt:datetime, sheet: Worksheet):
-        row = self.sheets_positive_rows[dt.month - 1]
-        sheet.cell(row, 1).value = dt.strftime("%d/%m")
-        name = self.clean_name(t.name)
-        rule = self.search_rule(name, 0)
-        if rule is not None:
-            name = rule.name
-        sheet.cell(row, 2).value = name
-        sheet.cell(row, 3).value = t.trn_amt
-        wt, vat = self.compute_vat(t.trn_amt, 0)
-        sheet.cell(row, 6).value = wt
-        sheet.cell(row, 7).value = vat
-        sheet.cell(row, 53).value = t.fit_id
-        self.sheets_positive_rows[dt.month - 1] += 1
-
-    def compute_vat(self, amount: float, vat_number):
-        wt = round(amount / (1 + self.vats[vat_number]), 2)
-        vat = amount - wt
-        return wt, vat
 
     def clean_name(self, name):
         name = name.replace("PRLV ", "")
@@ -141,8 +134,8 @@ class Transaction2ADAPLWriter:
         name = name.replace("GRENOBLE", "")
         name = name.replace("ST MARTIN D", "")
         name = name.replace("AUTRANS", "")
-        name = re.sub("\d{4,99}", "", name)
-        name = re.sub("\d{4,99}", "", name) # Not a bug
+        name = re.sub(r"\d{4,99}", "", name)
+        name = re.sub(r"\d{4,99}", "", name) # Not a bug
         if "*" in name:
             name = name[:name.index("*")]
         if name.endswith("/"):
@@ -207,6 +200,7 @@ ofx2adapl_rules = [ #+12
     OFX2AdaplRule("AMAZON", "AMAZON", 28, 0),
     OFX2AdaplRule("PAYPAL", "PAYPAL", 28, 0),
     OFX2AdaplRule("EURL DU ROCHER", "ROCHER DE L'OURS", 35, 1),
+    OFX2AdaplRule("CARREFOUR", "CARREFOUR", 35, 1),
 
     OFX2AdaplRule("ATP", "ATP FORMATION", 0, 0),
     OFX2AdaplRule("BANQUE POPULAIRE", "BPAURA", 0, 0),
@@ -214,8 +208,6 @@ ofx2adapl_rules = [ #+12
     OFX2AdaplRule("SKEMA", "SKEMA", 0, 0),
     OFX2AdaplRule("KERCIA", "KERCIA", 0, 0),
 ]
-
-
 
 
 if __name__ == '__main__':
@@ -233,4 +225,4 @@ if __name__ == '__main__':
     print(f"Found {len(p.transacs)} transactions")
     w = Transaction2ADAPLWriter(p.transacs, 2022, ofx2adapl_rules, append=args.append, destination=args.destination)
     w.write()
-    os.system(f"start EXCEL.EXE {w.path}")
+    os.system(f'start EXCEL.EXE "{w.path}"')
