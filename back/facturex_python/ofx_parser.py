@@ -16,10 +16,15 @@ class OFXParser:
 
     def __init__(self):
         self.transacs = []
+        self.row_num = 1
 
     def get_value(self, row):
         l = row.split(">")
-        return l[1].strip()
+        s = l[1].strip()
+        if s == "":
+            print(f"ERROR at row {self.row_num}: {row}")
+            quit(1)
+        return s
 
     def parse(self, path):
         print(f"Load {path}")
@@ -40,6 +45,7 @@ class OFXParser:
                     t.name = self.get_value(row)
                 elif row == "</STMTTRN>":
                     self.transacs.append(t)
+                self.row_num += 1
 
 class Transacs2CSVWriter:
 

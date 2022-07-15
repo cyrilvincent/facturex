@@ -140,6 +140,8 @@ class Transaction2ADAPLWriter:
             name = name[:name.index("*")]
         if name.endswith("/"):
             name = name[:-1]
+        if name.endswith("-"):
+            name = name[:-1]
         while "  " in name:
             name = name.replace("  ", " ")
         return name.strip()
@@ -201,6 +203,7 @@ ofx2adapl_rules = [ #+12
     OFX2AdaplRule("PAYPAL", "PAYPAL", 28, 0),
     OFX2AdaplRule("EURL DU ROCHER", "ROCHER DE L'OURS", 35, 1),
     OFX2AdaplRule("CARREFOUR", "CARREFOUR", 35, 1),
+    OFX2AdaplRule("DARTY", "DARTY", 43, 0),
 
     OFX2AdaplRule("ATP", "ATP FORMATION", 0, 0),
     OFX2AdaplRule("BANQUE POPULAIRE", "BPAURA", 0, 0),
@@ -211,7 +214,8 @@ ofx2adapl_rules = [ #+12
 
 
 if __name__ == '__main__':
-    # -a docs/comptes2.ofx 22
+    # -a docs/comptes2.ofx 2022
+    # docs/comptes.ofx 2022 -a -d "C:/Users/conta/OneDrive - cyrilvincent.com/CVC"
     print("OFX to ADAPL by Cyril Vincent")
     print("=============================")
     parser = argparse.ArgumentParser(description="OFX to ADAPL")
@@ -223,6 +227,6 @@ if __name__ == '__main__':
     p = OFXParser()
     p.parse(args.path)
     print(f"Found {len(p.transacs)} transactions")
-    w = Transaction2ADAPLWriter(p.transacs, 2022, ofx2adapl_rules, append=args.append, destination=args.destination)
+    w = Transaction2ADAPLWriter(p.transacs, args.year, ofx2adapl_rules, append=args.append, destination=args.destination)
     w.write()
     os.system(f'start EXCEL.EXE "{w.path}"')
