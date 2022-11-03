@@ -70,7 +70,7 @@ class Transaction2ADAPLWriter:
             self.workbook.save(self.path)
             print(f"Saved {self.nb} transactions")
         else:
-            print("No transaction to save")
+            print("No transaction to be saved")
             quit(0)
 
     def write_transaction(self, t:Transaction):
@@ -204,6 +204,7 @@ ofx2adapl_rules = [ #+12
     OFX2AdaplRule("EURL DU ROCHER", "ROCHER DE L'OURS", 35, 1),
     OFX2AdaplRule("CARREFOUR", "CARREFOUR", 35, 1),
     OFX2AdaplRule("DARTY", "DARTY", 43, 0),
+    OFX2AdaplRule("LEBONCOIN", "LE BON COIN", 49, 2),
 
     OFX2AdaplRule("ATP", "ATP FORMATION", 0, 0),
     OFX2AdaplRule("BANQUE POPULAIRE", "BPAURA", 0, 0),
