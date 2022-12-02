@@ -205,6 +205,8 @@ ofx2adapl_rules = [ #+12
     OFX2AdaplRule("CARREFOUR", "CARREFOUR", 35, 1),
     OFX2AdaplRule("DARTY", "DARTY", 43, 0),
     OFX2AdaplRule("LEBONCOIN", "LE BON COIN", 49, 2),
+    OFX2AdaplRule("ALIEXPRESS", "ALI EXPRESS", 30, 0),
+    OFX2AdaplRule("POUR LA SCIENCE", "POUR LA SCIENCE", 38, 0),
 
     OFX2AdaplRule("ATP", "ATP FORMATION", 0, 0),
     OFX2AdaplRule("BANQUE POPULAIRE", "BPAURA", 0, 0),
